@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 
-const HOST = process.env.HOST || '0.0.0.0';
+const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 8888;
 
 const config = {
@@ -18,22 +18,17 @@ const config = {
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),
+    noInfo: true,
+    hot: true,
     compress: true,
-    port: 9000
+    inline: true,
+    historyApiFallback: true,
+    port: PORT,
+    host: HOST
   },
   plugins: [
-    // Injects bundles in your index.html instead of wiring all manually.
-    // It also adds hash to all injected assets so we don't have problems
-    // with cache purging during deployment.
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      // inject: 'body',
-      // hash: true,
-      title: 'TEST!!!!!!!!!!!',
-      options: {
-        title: "TEST!!!!!!!!!!!!!*"
-      }
-    })
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({template: './src/index.html'})
   ]
 };
 
